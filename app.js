@@ -1,5 +1,6 @@
 const express = require("express")
 const bodyParser = require("body-parser")
+require('dotenv').config();
 const app = express()
 app.use(bodyParser.json());
 
@@ -31,7 +32,7 @@ app.post("/register", (req, res)=>{
     }
     else if(!phoneRegex.test(phoneNumber)){
         res.status(400).json({
-            'error' : 'Invalid Phone Number'
+            'error' : 'Invalid Phone Numbers'
         })
     }
     else if(password.length <= 8){
@@ -46,8 +47,8 @@ app.post("/register", (req, res)=>{
         })
     }
     else{
-        res.send("success")
-        
+        res.send(process.env.MY_NAME);
+
     }
 
 })
