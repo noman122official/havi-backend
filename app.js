@@ -1,6 +1,8 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
+require("./model/user");
+const userController = require("./controller/userController")
 require('dotenv').config();
 const app = express()
 app.use(bodyParser.json());
@@ -55,8 +57,33 @@ app.post("/register", (req, res)=>{
         })
     }
     else{
-        res.send(process.env.MY_NAME);
+        userController.registerUser({
+            fullname : name,
+            email : email,
+            phoneNumber : phoneNumber,
+            dob : dob,
+            password : password,
+            gender : gender
+        }).then(function(data){
+            res.json(data);
+        }).catch(function(error){
+            res.status(500).send(error);
+        })
     }
 
 })
 
+app.post("/login", function(req, res){
+    const email = req.body.email;
+    const password = req.body.password;
+    userController.validateUser(email, password).then(function(data){
+        if(data){
+            res.send("Logged In");
+        }
+        else{
+            res.status(401).send("incorrect cred");
+        }
+    }).catch(function(error){
+        res.status(500).send(error);
+    })
+})
