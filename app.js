@@ -1,5 +1,6 @@
 const express = require("express")
 const bodyParser = require("body-parser")
+const mongoose = require("mongoose");
 require('dotenv').config();
 const app = express()
 app.use(bodyParser.json());
@@ -10,7 +11,14 @@ app.listen(port, (error)=>{
         console.log(`Error connecting to the port ${port}`);
     }
     else{
-        console.log(`Connected to port ${port}`);
+        const dbConnectionURL = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.liefy.mongodb.net/${process.env.MONGODB_DB_NAME}?retryWrites=true&w=majority`
+        mongoose.connect(dbConnectionURL).then(function(){
+            console.log("connected to mongo db server");
+            console.log(`Connected to port ${port}`);
+        }).catch(function(error){
+            console.log("error connecting mongodb server",error);
+            process.exit();
+        })
     }
 
 })
@@ -48,7 +56,6 @@ app.post("/register", (req, res)=>{
     }
     else{
         res.send(process.env.MY_NAME);
-
     }
 
 })
