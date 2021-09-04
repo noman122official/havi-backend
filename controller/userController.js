@@ -12,12 +12,7 @@ userController.validateUser = async function(email, password){
         email : email,
         password : password
     }).then(function(data){
-        if(data){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return data
     }).catch(function(error){
         return error;
     })

@@ -1,6 +1,7 @@
-const express = require("express")
-const bodyParser = require("body-parser")
+const express = require("express");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 require("./model/user");
 const userController = require("./controller/userController")
 require('dotenv').config();
@@ -78,7 +79,15 @@ app.post("/login", function(req, res){
     const password = req.body.password;
     userController.validateUser(email, password).then(function(data){
         if(data){
-            res.send("Logged In");
+            try{
+                var token = jwt.sign(data.toJSON(), process.env.JWT_LOGIN_SECRET);
+                res.json({
+                    token : token
+                })
+            }
+            catch(error){
+                res.status(500).send(error)
+            }
         }
         else{
             res.status(401).send("incorrect cred");

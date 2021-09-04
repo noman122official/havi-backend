@@ -31,6 +31,18 @@ const userSchema = new Schema({
         type: String,
         enum: ['male', 'female'],
         required: true
+    },
+    isAdmin: {
+        type : Boolean,
+        default : false
+    },
+    createdDate : {
+        type : Date,
+        default : new Date()
+    },
+    lastModified : {
+        type : Date,
+        default : new Date()
     }
 })
 mongoose.model("User", userSchema, "user");
