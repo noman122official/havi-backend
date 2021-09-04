@@ -1,13 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+var cors = require('cors')
 const jwt = require("jsonwebtoken");
 require("./model/user");
 require("./model/task");
 const userController = require("./controller/userController")
 const taskController = require("./controller/taskController")
 require('dotenv').config();
-const app = express()
+const app = express();
+
+app.use(cors())
 app.use(bodyParser.json());
 
 const port = process.env.PORT
@@ -84,7 +87,8 @@ app.post("/login", function(req, res){
             try{
                 var token = jwt.sign(data.toJSON(), process.env.JWT_LOGIN_SECRET);
                 res.json({
-                    token : token
+                    token : token,
+                    name : data.fullname
                 })
             }
             catch(error){
