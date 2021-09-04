@@ -17,4 +17,9 @@ userController.validateUser = async function(email, password){
         return error;
     })
 }
+
+
+userController.getAllUsers = async function(){
+    return await userModel.find()
+}
 module.exports = userController;

@@ -23,3 +23,5 @@ const taskSchema = new Schema({
         default : new Date()
     }
 })
+
+mongoose.model("Task", taskSchema, "task");

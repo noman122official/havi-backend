@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 require("./model/user");
+require("./model/task");
 const userController = require("./controller/userController")
+const taskController = require("./controller/taskController")
 require('dotenv').config();
 const app = express()
 app.use(bodyParser.json());
@@ -64,7 +66,8 @@ app.post("/register", (req, res)=>{
             phoneNumber : phoneNumber,
             dob : dob,
             password : password,
-            gender : gender
+            gender : gender,
+            isAdmin: req.body.isAdmin || false
         }).then(function(data){
             res.json(data);
         }).catch(function(error){
@@ -94,5 +97,58 @@ app.post("/login", function(req, res){
         }
     }).catch(function(error){
         res.status(500).send(error);
+    })
+})
+
+
+app.post("/task", function(req, res){
+    const token = req.headers.token;
+    jwt.verify(token, process.env.JWT_LOGIN_SECRET, function(err, userDetials){
+        if(err){
+            res.status(401).send("Not authorized to perform this operation");
+        }
+        else{
+            taskController.addTask({
+                name : req.body.name,
+                createdBy : userDetials._id
+            }).then(function(data){
+                res.json(data)
+            }).catch(function(error){
+                res.status(500).send(error)
+            })
+
+        }
+    })
+})
+
+app.get("/task", function(req, res){
+    const token = req.headers.token;
+    jwt.verify(token, process.env.JWT_LOGIN_SECRET, function(err, userDetials){
+        if(err){
+            res.status(401).send("Not authorized to perform this operation");
+        }
+        else{
+            taskController.getTaskByUserid(userDetials._id).then(function(data){
+                res.json(data)
+            }).catch(function(error){
+                res.status(500).send(error)
+            })            
+        }
+    })
+})
+
+app.get("/admin/users", function(req, res){
+    const token = req.headers.token;
+    jwt.verify(token, process.env.JWT_LOGIN_SECRET, function(err, userDetials){
+        if(err || !userDetials.isAdmin){
+            res.status(401).send("Not authorized to perform this operation");
+        }
+        else{  
+            userController.getAllUsers().then(function(data){
+                res.json(data)
+            }).catch(function(error){
+                res.status(500).send(error)
+            })
+        }
     })
 })
