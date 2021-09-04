@@ -10,7 +10,7 @@ require('dotenv').config();
 const app = express()
 app.use(bodyParser.json());
 
-const port = 9200
+const port = process.env.PORT
 app.listen(port, (error)=>{
     if(error){
         console.log(`Error connecting to the port ${port}`);
@@ -22,7 +22,6 @@ app.listen(port, (error)=>{
             console.log(`Connected to port ${port}`);
         }).catch(function(error){
             console.log("error connecting mongodb server",error);
-            process.exit();
         })
     }
 
