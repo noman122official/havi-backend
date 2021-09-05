@@ -14,6 +14,7 @@ app.use(cors({
     origin: '*'
 }));
 app.use(bodyParser.json());
+app.options('*', cors()) 
 
 const port = process.env.PORT
 app.listen(port, (error)=>{
