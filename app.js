@@ -10,7 +10,9 @@ const taskController = require("./controller/taskController")
 require('dotenv').config();
 const app = express();
 
-app.use(cors())
+app.use(cors({
+    origin: '*'
+}));
 app.use(bodyParser.json());
 
 const port = process.env.PORT
