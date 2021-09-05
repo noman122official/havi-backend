@@ -43,3 +43,12 @@
 	 - GET /admin/users - to get list of all users
 		 - header - token (recieved from login api, with `isAdmin = true`)
 	
+
+
+## Registration Validation Document
+
+For registeration, there are following Constraints:
+
+ - Password: Should have more than 8 characters
+ - Email : Should be Compliant with Regex : `/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/`
+ - Phone Number: Should be compliant with Regex : `/^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/`
